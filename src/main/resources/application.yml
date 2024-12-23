@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: user-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    refresh:
+      extra-refreshable: com.zaxxer.hikari.HikariDataSource
   h2:
     console:
       enabled: true
@@ -40,8 +48,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans
+        include: refresh, health, beans, busrefresh
 
-token:
-  expiration_time: 86400000
-  secret: 01234567890123456123123789012345678901234567890123456789
+#token:
+#  expiration_time: 86400000
+#  secret: 01234567890123456123123789012345678901234567890123456789
