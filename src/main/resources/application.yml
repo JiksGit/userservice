@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: user-service
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    enabled: true
+#  sleuth:
+#    sampler:
+#      probability: 1.0
   rabbitmq:
     host: 127.0.0.1
     port: 5672
@@ -41,11 +47,26 @@ greeting:
 
 logging:
   level:
-    com.example.userservice.client: DEBUG
+    com.example.orderservice: DEBUG
+  pattern:
+    correlation: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 
 
 management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: B3
+      produce: B3
+  metrics:
+    export:
+      tracing:
+        enabled: true # Tracing 활성화
+      zipkin:
+        enabled: true # Zipkin 활성화
+        endpoint: http://localhost:9411/api/v2/spans # Zipkin 서버 URL
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, busrefresh
+        include: refresh, health, beans, busrefresh, httptrace, info, metrics, prometheus
